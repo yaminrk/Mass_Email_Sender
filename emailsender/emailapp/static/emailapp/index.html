@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Email Sender</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+</head>
+<style>
+    .tooltip {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 250px;
+        background-color: #373434;
+        color: #fff;
+        text-align: center;
+        padding: 5px 0;
+        border-radius: 6px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        margin-left: -80px;
+        padding: 8px;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+    }
+
+</style>
+
+<body>
+    <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+        <div
+            class="w-full sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl bg-white rounded-xl shadow-md overflow-hidden">
+            <div class="px-8 py-6">
+                <h2 class="text-2xl font-bold text-center">Email Sender</h2>
+                <p class="mt-2 text-center text-gray-600">
+                    Fill the form below to send your emails.
+                </p>
+                <form id="emailForm" class="mt-6 space-y-6">
+                    <div class="form-group space-y-2">
+                        <label
+                            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            for="email">Email</label>
+                        <input type="email" id="email" name="email"
+                            class="form-control flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" />
+                    </div>
+                    <div class="form-group space-y-2">
+                        <label
+                            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            for="password">Password</label>
+                        <input type="password" id="password" name="password"
+                            class="form-control flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" />
+                    </div>
+                    <div class="form-group space-y-2">
+                        <label
+                            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject"
+                            class="form-control flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" />
+                    </div>
+                    <div class="form-group space-y-2">
+                        <label
+                            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            for="text">Text</label>
+                        <textarea id="text" name="text"
+                            class="form-control flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[100px]"></textarea>
+                    </div>
+                    <div class="form-group space-y-2">
+                        <label
+                            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center"
+                            for="csv">CSV File
+                            <span class="tooltip">
+                                <svg class="w-4 h-4 ml-2 mt-.5" xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                                    <path
+                                        d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z" />
+                                </svg>
+                                <span class="tooltiptext">This webpage will search for a row named "email" in your CSV file
+                                    and send the email to every email in the row.</span>
+                            </span>
+                        </label>                        
+                        <input type="file" id="csv" name="csv" accept=".csv"
+                            class="form-control-file flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                    </div>
+                    <button type="submit"
+                        class="btn btn-primary inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-blue-500 text-white hover:bg-blue-700 h-10 px-4 py-2 w-full">
+                        Submit
+                    </button>
+
+                </form>
+                <div id="status" class="mt-3"></div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    document
+        .getElementById("emailForm")
+        .addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            var formData = new FormData(event.target);
+            var statusElement = document.getElementById("status");
+
+            fetch("/email_sender/send_emails/", {
+                method: "POST",
+                body: formData,
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    statusElement.textContent = data.status;
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    statusElement.textContent = "Error: " + error;
+                });
+        });
+</script>
+
+</html>
