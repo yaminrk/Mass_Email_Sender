@@ -1,6 +1,4 @@
 # Mass_Email_Sender
-# Email Sender Web Application
-
 ## Overview
 This is a web application that allows you to send emails to multiple recipients at once. It reads the recipient email addresses from a CSV file and sends an email to each one. The application supports multiple email providers.
 
