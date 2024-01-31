@@ -2,6 +2,16 @@
 ## Overview
 This is a web application that allows you to send emails to multiple recipients at once. It reads the recipient email addresses from a CSV file and sends an email to each one. The application supports multiple email providers.
 
+## languages and Framework Used 
+ FRONTEND
+ - Html
+ - Css
+ - JS
+ - Tailwind
+ BACKEND
+ - Python
+ - Django
+
 ## Prerequisites
 - A modern web browser (Chrome, Firefox, Safari, etc.)
 - A CSV file with a column named 'email' containing the email addresses of the recipients
