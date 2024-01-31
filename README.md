@@ -23,6 +23,11 @@ The web application uses a Python script on the backend to send the emails. When
 
 The script automatically selects the SMTP server and port based on the email domain. It currently supports Gmail, Outlook, Yahoo, AOL, Hotmail, and ProtonMail. You can easily add more email providers by updating the `email_providers` dictionary in the script.
 
+## Error handeling
+1.Unfilled Fields: The application checks if all the required fields in the form are filled. If a field is left empty and the user attempts to submit the form, an error message is displayed below the corresponding field, and the page automatically scrolls to that field. The error message is removed as soon as the user starts typing in the field.
+
+2.Incorrect Email or Password: After ensuring all fields are filled, the application sends a request to the server to authenticate the user’s email and password. If the server responds with a status indicating that the email or password is incorrect, an error message is displayed under both the email and password fields. The user can then correct their email or password and try again.
+
 ## Note
 Different email providers may have different security settings. For example, to use Gmail's SMTP server, you may need to enable "Less secure app access" in your Google account settings.
 
