@@ -8,6 +8,7 @@ This is a web application that allows you to send emails to multiple recipients 
  - Css
  - JS
  - Tailwind
+   
  BACKEND
  - Python
  - Django
