@@ -1,55 +1,183 @@
-import csv
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
+<!DOCTYPE html>
+<html>
 
-def send_email(user_email, receiver_email, subject, text, server):
-    msg = MIMEMultipart()
-    msg['From'] = user_email
-    msg['To'] = receiver_email
-    msg['Subject'] = subject
-
-    msg.attach(MIMEText(text, 'plain'))
-
-    server.send_message(msg)
-
-def sendEmail(user_email, password, subject, text, csv_file):
-    # Define the SMTP servers and ports for different email providers
-    email_providers = {
-        'gmail.com': {'server': 'smtp.gmail.com', 'port': 587},
-        'outlook.com': {'server': 'smtp-mail.outlook.com', 'port': 587},
-        'yahoo.com': {'server': 'smtp.mail.yahoo.com', 'port': 587},
-        'aol.com': {'server': 'smtp.aol.com', 'port': 587},
-        'hotmail.com': {'server': 'smtp.live.com', 'port': 587},
-        'protonmail.com': {'server': 'smtp.protonmail.com', 'port': 587}
+<head>
+    <title>Email Sender</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+</head>
+<style>
+    .tooltip {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
     }
 
-    # Get the email domain from the user email
-    email_domain = user_email.split('@')[1]
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 250px;
+        background-color: #373434;
+        color: #fff;
+        text-align: center;
+        padding: 5px 0;
+        border-radius: 6px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        margin-left: -80px;
+        padding: 8px;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
 
-    # Get the SMTP server and port for the email domain
-    smtp_server = email_providers[email_domain]['server']
-    smtp_port = email_providers[email_domain]['port']
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+    }
 
-    smtp = smtplib.SMTP(smtp_server, smtp_port)
-    smtp.starttls()
-    smtp.login(user_email, password)
+</style>
 
-    with open(csv_file, 'r') as file:
-        reader = csv.reader(file)
-        header = next(reader)  # get the header row
+<body>
+    <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+        <div
+            class="w-full sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl bg-white rounded-xl shadow-md overflow-hidden">
+            <div class="px-8 py-6">
+                <h2 class="text-2xl font-bold text-center">Email Sender</h2>
+                <p class="mt-2 text-center text-gray-600">
+                    Fill the form below to send your emails.
+                </p>
+                <form id="emailForm" class="mt-6 space-y-6">
+                    <div class="form-group space-y-2">
+                        <label
+                            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            for="email">Email</label>
+                        <input type="email" id="email" name="email"
+                            class="form-control flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" />
+                    </div>
+                    <div class="form-group space-y-2">
+                        <label
+                            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            for="password">Password</label>
+                        <input type="password" id="password" name="password"
+                            class="form-control flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" />
+                    </div>
+                    <div class="form-group space-y-2">
+                        <label
+                            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject"
+                            class="form-control flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" />
+                    </div>
+                    <div class="form-group space-y-2">
+                        <label
+                            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            for="text">Text</label>
+                        <textarea id="text" name="text"
+                            class="form-control flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[100px]"></textarea>
+                    </div>
+                    <div class="form-group space-y-2">
+                        <label
+                            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center"
+                            for="csv">CSV File
+                            <span class="tooltip">
+                                <svg class="w-4 h-4 ml-2 mt-.5" xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                                    <path
+                                        d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z" />
+                                </svg>
+                                <span class="tooltiptext">This webpage will search for a row named "email" in your CSV file
+                                    and send the email to every email in the row.</span>
+                            </span>
+                        </label>                        
+                        <input type="file" id="csv" name="csv" accept=".csv"
+                            class="form-control-file flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                    </div>
+                    <button type="submit"
+                        class="btn btn-primary inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-blue-500 text-white hover:bg-blue-700 h-10 px-4 py-2 w-full">
+                        Submit
+                    </button>
 
-        # Find the index of the column that contains email addresses
-        email_index = header.index('email')  # replace 'email' with the exact header name for the email column
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    document.getElementById("emailForm").addEventListener("submit", function (event) {
+    event.preventDefault();
 
-        emails = []
-        for row in reader:
-            receiver_email = row[email_index]
+    // Get all the input fields
+    var email = document.getElementById("email");
+    var password = document.getElementById("password");
+    var subject = document.getElementById("subject");
+    var text = document.getElementById("text");
+    var csv = document.getElementById("csv");
 
-            if receiver_email:
-                emails.append(receiver_email)
+    // Check if all the fields are filled
+    if (!email.value || !password.value || !subject.value || !text.value || !csv.value) {
+        // If a field is not filled, display an error message and scroll to that field
+        if (!email.value) {
+            displayError(email, "Email is required");
+        }
+        if (!password.value) {
+            displayError(password, "Password is required");
+        }
+        if (!subject.value) {
+            displayError(subject, "Subject is required");
+        }
+        if (!text.value) {
+            displayError(text, "Text is required");
+        }
+        if (!csv.value) {
+            displayError(csv, "CSV file is required");
+        }
+    } else {
+        // If all the fields are filled, send the form data
+        var formData = new FormData(event.target);
+        var statusElement = document.getElementById("status");
 
-        for receiver_email in emails:
-            send_email(user_email, receiver_email, subject, text, smtp)
+        fetch("/email_sender/send_emails/", {
+            method: "POST",
+            body: formData,
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Email or password is incorrect");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                statusElement.textContent = data.status;
+            })
+            .catch((error) => {
+                if (error.message === "Email or password is incorrect") {
+                    displayError(email, error.message);
+                    displayError(password, error.message);
+                } else {
+                    console.error("Error:", error);
+                    statusElement.textContent = "Error: " + error;
+                }
+            });
+    }
+});
 
-    smtp.quit()
+function displayError(input, message) {
+    // Create an error message element
+    var errorMessage = document.createElement("div");
+    errorMessage.textContent = message;
+    errorMessage.style.color = "red";
+
+    // Insert the error message after the input field
+    input.parentNode.insertBefore(errorMessage, input.nextSibling);
+
+    // Scroll to the input field
+    input.scrollIntoView({ behavior: "smooth" });
+
+    // Add an event listener to the input field that removes the error message when the user starts typing
+    input.addEventListener("input", function () {
+        errorMessage.remove();
+    });
+}
+</script>
+
+</html>
